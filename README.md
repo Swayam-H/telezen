@@ -49,7 +49,7 @@ Everything runs on your phone. TeleZen has no internet permission and collects n
 
 ## Install
 
-1. Download `app-release.apk` from the [latest release](https://github.com/Swayam-H/telezen/releases/latest) on your phone.
+1. Download the `TeleZen-v…apk` file from the [latest release](https://github.com/Swayam-H/telezen/releases/latest) on your phone.
 2. Open it. If Android blocks it, tap **Settings**, turn on **Allow from this source**, then **Install**. If Play Protect warns about an unknown developer, tap **More details › Install anyway**.
 3. Open TeleZen and follow the setup.
 
