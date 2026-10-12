@@ -1,0 +1,38 @@
+name: Feed not blocked
+description: Reels, Shorts or another feed gets through (usually after an app update)
+labels: [detection-rules]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! To get the screen details that let us fix the rule:
+        1. Open the feed that isn't blocked and stay on it for about 10 seconds.
+        2. In TeleZen, go to **Home › More apps and detection rules › Report not working**, pick the feed and copy the report.
+  - type: dropdown
+    id: feed
+    attributes:
+      label: Which feed?
+      options:
+        - Instagram Reels
+        - YouTube Shorts
+        - Short-form websites
+        - TikTok
+        - Facebook Reels
+        - Snapchat Spotlight
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where did it get through?
+      description: For example "Reels opened from a DM" or "Shorts from YouTube search".
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Report from TeleZen
+      description: Paste the text from Report not working. It contains app versions, view IDs and button labels only.
+      render: text
+    validations:
+      required: true
