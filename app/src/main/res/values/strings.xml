@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TeleZen</string>
+    <string name="accessibility_description">TeleZen uses this service to see which app and screen is open, so it can block short-form feeds like Instagram Reels and YouTube Shorts, show pause screens before distracting apps, and enforce your limits and schedules. Everything is processed on your device. Nothing is collected, stored off-device or shared.</string>
+    <string name="admin_description">Uninstall protection: while enabled, TeleZen can\'t be uninstalled until you turn this off in TeleZen settings.</string>
+</resources>

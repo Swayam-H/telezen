@@ -1,0 +1,150 @@
+{
+  "version": 2,
+  "updated": "2026-10-12",
+  "targets": [
+    {
+      "id": "instagram_reels",
+      "name": "Instagram Reels",
+      "description": "The Reels tab and the full-screen Reels viewer, including Reels opened from the feed, DMs, profiles and shared links.",
+      "packages": [
+        "com.instagram.android"
+      ],
+      "match": [
+        {
+          "type": "viewId",
+          "ids": [
+            "clips_viewer_view_pager",
+            "clips_viewer_container",
+            "root_clips_layout",
+            "clips_swipe_refresh_container"
+          ]
+        },
+        {
+          "type": "viewId",
+          "ids": [
+            "clips_tab"
+          ],
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": "youtube_shorts",
+      "name": "YouTube Shorts",
+      "description": "The Shorts tab and the Shorts player, including Shorts opened from the home feed, search and channels.",
+      "packages": [
+        "com.google.android.youtube",
+        "app.revanced.android.youtube",
+        "app.rvx.android.youtube"
+      ],
+      "match": [
+        {
+          "type": "viewId",
+          "ids": [
+            "reel_recycler",
+            "reel_player_page_container",
+            "reel_watch_player",
+            "reel_watch_fragment_root"
+          ]
+        },
+        {
+          "type": "viewId",
+          "ids": [
+            "com.google.android.youtube:id/reel_recycler",
+            "com.google.android.youtube:id/reel_player_page_container",
+            "com.google.android.youtube:id/reel_watch_player"
+          ]
+        },
+        {
+          "type": "desc",
+          "value": "Shorts",
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": "facebook_reels",
+      "name": "Facebook Reels",
+      "description": "The Reels/Video tab in Facebook.",
+      "experimental": true,
+      "packages": [
+        "com.facebook.katana"
+      ],
+      "match": [
+        {
+          "type": "desc",
+          "value": "Reels",
+          "selected": true
+        },
+        {
+          "type": "desc",
+          "value": "Reels, tab 2 of 6",
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": "snapchat_spotlight",
+      "name": "Snapchat Spotlight",
+      "description": "The Spotlight tab in Snapchat. Chats and the camera stay usable.",
+      "experimental": true,
+      "packages": [
+        "com.snapchat.android"
+      ],
+      "match": [
+        {
+          "type": "desc",
+          "value": "Spotlight",
+          "selected": true
+        },
+        {
+          "type": "viewId",
+          "ids": [
+            "spotlight_container",
+            "spotlight_view_pager"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "description": "The whole app, because all of TikTok is a short-form feed.",
+      "wholeApp": true,
+      "packages": [
+        "com.zhiliaoapp.musically",
+        "com.ss.android.ugc.trill",
+        "com.zhiliaoapp.musically.go"
+      ]
+    },
+    {
+      "id": "browser_short_form",
+      "name": "Short-form websites",
+      "description": "youtube.com/shorts, instagram.com/reels, facebook.com/reel and tiktok.com in Chrome, Firefox, Brave, Edge and Samsung Internet.",
+      "packages": [
+        "com.android.chrome",
+        "com.chrome.beta",
+        "org.mozilla.firefox",
+        "com.brave.browser",
+        "com.microsoft.emmx",
+        "com.sec.android.app.sbrowser"
+      ],
+      "match": [
+        {
+          "type": "url",
+          "ids": [
+            "com.android.chrome:id/url_bar",
+            "com.chrome.beta:id/url_bar",
+            "org.mozilla.firefox:id/mozac_browser_toolbar_url_view",
+            "org.mozilla.firefox:id/url_bar_title",
+            "com.brave.browser:id/url_bar",
+            "com.microsoft.emmx:id/url_bar",
+            "com.sec.android.app.sbrowser:id/location_bar_edit_text"
+          ],
+          "regex": "^(https?://)?([\\w-]+\\.)*(youtube\\.com/shorts|instagram\\.com/reels?(/|$)|facebook\\.com/reel|tiktok\\.com)"
+        }
+      ],
+      "staleCheck": false
+    }
+  ]
+}
