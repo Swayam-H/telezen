@@ -18,6 +18,7 @@ object StatsExport {
         val today = LocalDate.now()
         val from = today.minusDays(DAYS - 1)
         val blocks = app.db.events().blocksByDay(from.toString(), today.toString()).groupBy { it.day }
+        val skip = Apps.protectedPackages(app) // home screen time isn't app time
         buildJsonObject {
             put("app", "telezen")
             put("type", "stats")
@@ -27,7 +28,7 @@ object StatsExport {
                 for (i in 0 until DAYS) {
                     val date = from.plusDays(i)
                     // Android only keeps usage events for about a week, so older days may be empty.
-                    val usage = app.usage.day(date).filterValues { it >= 60_000 }
+                    val usage = app.usage.day(date).filter { (pkg, ms) -> ms >= 60_000 && pkg !in skip }
                     val dayBlocks = blocks[date.toString()].orEmpty()
                     if (usage.isNotEmpty() || dayBlocks.isNotEmpty()) {
                         addJsonObject {
