@@ -48,6 +48,8 @@ fun DaySummary.goalMet(): Boolean = trackedMinutes <= goalMinutes
 
 data class KeyCount(val name: String?, val count: Int)
 
+data class DayKeyCount(val day: String, val name: String?, val count: Int)
+
 @Dao
 interface EventDao {
     @Insert
@@ -67,6 +69,9 @@ interface EventDao {
 
     @Query("SELECT targetId AS name, COUNT(*) AS count FROM events WHERE day >= :from AND day <= :to AND type = 'SHORT_BLOCK' GROUP BY targetId")
     fun blocksByTarget(from: String, to: String): Flow<List<KeyCount>>
+
+    @Query("SELECT day, targetId AS name, COUNT(*) AS count FROM events WHERE day >= :from AND day <= :to AND type = 'SHORT_BLOCK' GROUP BY day, targetId")
+    suspend fun blocksByDay(from: String, to: String): List<DayKeyCount>
 
     @Query("SELECT extra AS name, COUNT(*) AS count FROM events WHERE day >= :from AND day <= :to AND type = 'SESSION_START' AND extra IS NOT NULL GROUP BY extra ORDER BY count DESC")
     fun reasons(from: String, to: String): Flow<List<KeyCount>>

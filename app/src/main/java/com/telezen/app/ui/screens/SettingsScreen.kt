@@ -34,6 +34,7 @@ import androidx.navigation.NavHostController
 import com.telezen.app.BuildConfig
 import com.telezen.app.core.Permissions
 import com.telezen.app.core.Pin
+import com.telezen.app.core.StatsExport
 import com.telezen.app.data.BlockBehavior
 import com.telezen.app.data.ThemeMode
 import com.telezen.app.data.UpdateResult
@@ -45,6 +46,7 @@ import com.telezen.app.ui.components.SwitchRow
 import com.telezen.app.ui.components.rememberResumeTick
 import com.telezen.app.ui.components.rememberSnack
 import com.telezen.app.ui.components.rememberUpdater
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
 
@@ -83,6 +85,16 @@ fun SettingsScreen(nav: NavHostController) {
                 null -> snack("Couldn't read the file")
                 UpdateResult.Ok -> snack("Settings imported")
                 is UpdateResult.Rejected -> snack(r.reason)
+            }
+        }
+    }
+    val statsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        if (uri != null) {
+            app.scope.launch {
+                runCatching {
+                    val json = StatsExport.json(app)
+                    ctx.contentResolver.openOutputStream(uri)!!.use { it.write(json.toByteArray()) }
+                }.onSuccess { snack("Stats exported") }.onFailure { snack("Couldn't write the file") }
             }
         }
     }
@@ -194,6 +206,11 @@ fun SettingsScreen(nav: NavHostController) {
                         title = "Import settings",
                         subtitle = "Replace your current settings with an exported file.",
                         onClick = { importLauncher.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
+                    )
+                    SettingRow(
+                        title = "Export stats for laptop",
+                        subtitle = "Save up to 30 days of screen time per app and blocked feeds to a file, to import into the WatchZen dashboard.",
+                        onClick = { statsLauncher.launch("telezen-stats.json") },
                     )
                 }
             }
