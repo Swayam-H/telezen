@@ -92,7 +92,7 @@ Fixed rules can be loaded with **Import rules** on the same screen, without rein
 
 ## Sync to your laptop (optional)
 
-The WatchZen browser extension (a separate project, for Chrome, Edge and Brave) shows laptop and phone time on one dashboard. To send your phone's stats to it automatically, install the **sync build** (`app-sync-debug.apk` from the build's artifacts) instead of the normal one. It is the same app plus a network permission. Use Settings › Backup to carry your settings over.
+The WatchZen browser extension (a separate project, for Chrome, Edge and Brave) shows laptop and phone time on one dashboard. To send your phone's stats to it automatically, install the **sync build** (`app-sync-debug.apk` from the build's artifacts) instead of the normal one. It is the same app plus a network permission. Use Settings › Backup to carry your settings over. Debug builds from different CI runs are signed with different keys, so if Android refuses to install over your current TeleZen, you have to uninstall it first. That deletes TeleZen's own history (blocked feeds, day summaries, streaks); Android's screen time is unaffected. Turn off strict mode and uninstall protection before uninstalling.
 
 1. On the laptop, run `node helper/server.js` from the WatchZen folder. It prints one pairing code per network address.
 2. In TeleZen: Settings › Sync to laptop › Pair, and paste the code for the address on your phone's Wi-Fi.

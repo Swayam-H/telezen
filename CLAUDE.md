@@ -16,7 +16,7 @@ Android app (Kotlin, Jetpack Compose, Room, WorkManager) that blocks short-form 
 - `data/SettingsStore.kt`: every settings change goes through `update {}`, which rejects loosening changes while strict mode is on.
 - `assets/rules.json`: detection rules. Bump `version` when changing them; `RulesParser` validates on load.
 - `ui/intervention/`: the pause/block/limit/schedule/session-end screen, started by the service in its own task.
-- Flavors: `core/LaptopSync.kt` and `ui/screens/LaptopSyncSection.kt` exist in both `src/offline` (empty stubs) and `src/sync` (real code: pairing code in its own SharedPreferences, HTTP push of `StatsExport`, hourly WorkManager job). Main code only calls `LaptopSync.schedule` and `LaptopSync.available`. The laptop side is the WatchZen helper (`watchzen/helper/server.js`).
+- Flavors: `core/LaptopSync.kt` and `ui/screens/LaptopSyncSection.kt` exist in both `src/offline` (empty stubs) and `src/sync` (real code: pairing code in its own SharedPreferences, HTTP push of `StatsExport`, hourly WorkManager job). Main code only calls `LaptopSync.schedule` and `LaptopSync.available`. The laptop side is the WatchZen helper, in the separate WatchZen project (`helper/server.js` there, not in this repo); the code format is `address:port/token`, checked by `LaptopSync.parse`.
 
 ## Gotchas
 
