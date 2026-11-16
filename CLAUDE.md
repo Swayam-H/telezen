@@ -1,12 +1,12 @@
 # TeleZen
 
-Android app (Kotlin, Jetpack Compose, Room, WorkManager) that blocks short-form feeds inside apps via an AccessibilityService. Android only; no network access by design. Never add the INTERNET permission.
+Android app (Kotlin, Jetpack Compose, Room, WorkManager) that blocks short-form feeds inside apps via an AccessibilityService. Android only. The `offline` flavor (the normal build) has no network access by design: never add the INTERNET permission to `src/main` or `src/offline`, and keep network code out of them. Only the `sync` flavor (`app/src/sync`) has it, to push stats to the user's own laptop; it is a separate APK so the normal one stays internet-free.
 
 ## Commands
 
-- Unit tests: `./gradlew testDebugUnitTest`
-- Debug APK: `./gradlew assembleDebug`
-- Release APK (R8 minified, debug-signed): `./gradlew assembleRelease`. Check release builds after touching serialized models: kotlinx.serialization + R8 keep rules are in `app/proguard-rules.pro`.
+- Unit tests: `./gradlew testOfflineDebugUnitTest testSyncDebugUnitTest`
+- Debug APKs (both flavors): `./gradlew assembleDebug`
+- Release APK (R8 minified, debug-signed): `./gradlew assembleOfflineRelease` (or `assembleSyncRelease`). Check release builds after touching serialized models: kotlinx.serialization + R8 keep rules are in `app/proguard-rules.pro`.
 
 ## Architecture
 
@@ -16,6 +16,7 @@ Android app (Kotlin, Jetpack Compose, Room, WorkManager) that blocks short-form 
 - `data/SettingsStore.kt`: every settings change goes through `update {}`, which rejects loosening changes while strict mode is on.
 - `assets/rules.json`: detection rules. Bump `version` when changing them; `RulesParser` validates on load.
 - `ui/intervention/`: the pause/block/limit/schedule/session-end screen, started by the service in its own task.
+- Flavors: `core/LaptopSync.kt` and `ui/screens/LaptopSyncSection.kt` exist in both `src/offline` (empty stubs) and `src/sync` (real code: pairing code in its own SharedPreferences, HTTP push of `StatsExport`, hourly WorkManager job). Main code only calls `LaptopSync.schedule` and `LaptopSync.available`. The laptop side is the WatchZen helper (`watchzen/helper/server.js`).
 
 ## Gotchas
 

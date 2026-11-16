@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Only the sync build has network access: it sends stats to the user's own laptop on the local network. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- shortcut: plain HTTP to a LAN address (Android blocks it by default); the token is readable on the Wi-Fi. Move to HTTPS for untrusted networks. -->
+    <application android:usesCleartextTraffic="true" />
+</manifest>

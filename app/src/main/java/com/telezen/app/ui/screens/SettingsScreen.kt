@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.telezen.app.BuildConfig
+import com.telezen.app.core.LaptopSync
 import com.telezen.app.core.Permissions
 import com.telezen.app.core.Pin
 import com.telezen.app.core.StatsExport
@@ -213,6 +214,9 @@ fun SettingsScreen(nav: NavHostController) {
                         onClick = { statsLauncher.launch("telezen-stats.json") },
                     )
                 }
+            }
+            if (LaptopSync.available) {
+                item { LaptopSyncSection() }
             }
             item {
                 SectionCard(title = "Appearance") {
