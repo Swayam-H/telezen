@@ -4,7 +4,7 @@
 
 TeleZen is an Android app that blocks Instagram Reels, YouTube Shorts and other short-form video feeds *without* blocking the whole app. Messages, search, profiles and long videos keep working. It also adds a mindful pause before distracting apps, daily limits, focus schedules and a strict mode for when willpower runs low.
 
-Everything runs on your phone. TeleZen has no internet permission and collects nothing.
+Everything runs on your phone. The normal TeleZen has no internet permission and collects nothing. An optional separate build can send your stats to your own laptop (see [Sync to your laptop](#sync-to-your-laptop-optional)).
 
 [![Build](https://github.com/Swayam-H/telezen/actions/workflows/build.yml/badge.svg)](https://github.com/Swayam-H/telezen/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -85,19 +85,29 @@ Fixed rules can be loaded with **Import rules** on the same screen, without rein
 
 ## Privacy
 
-- No internet permission: TeleZen can't send anything anywhere.
+- No internet permission in the normal build: it can't send anything anywhere. The optional sync build has one and sends only to the laptop address you pair, on your own Wi-Fi.
 - No accounts, analytics, ads or trackers.
 - Stats and settings stay in TeleZen's private storage on your phone.
 - Problem reports are only ever shared by you, through Android's share sheet.
+
+## Sync to your laptop (optional)
+
+The WatchZen browser extension (a separate project, for Chrome, Edge and Brave) shows laptop and phone time on one dashboard. To send your phone's stats to it automatically, install the **sync build** (`app-sync-debug.apk` from the build's artifacts) instead of the normal one. It is the same app plus a network permission. Use Settings › Backup to carry your settings over. Debug builds from different CI runs are signed with different keys, so if Android refuses to install over your current TeleZen, you have to uninstall it first. That deletes TeleZen's own history (blocked feeds, day summaries, streaks); Android's screen time is unaffected. Turn off strict mode and uninstall protection before uninstalling.
+
+1. On the laptop, run `node helper/server.js` from the WatchZen folder. It prints one pairing code per network address.
+2. In TeleZen: Settings › Sync to laptop › Pair, and paste the code for the address on your phone's Wi-Fi.
+3. TeleZen sends the last 30 days of stats on pairing, on Sync now, and about once an hour. The dashboard refreshes by itself.
+
+Limits: both devices need the same Wi-Fi (some campus and guest networks isolate devices from each other; a phone hotspot works), Windows asks to allow Node on Private networks the first time, and the connection is plain HTTP, so the pairing code and stats can be read by others on that Wi-Fi. If your laptop's address changes, pair again.
 
 ## Build from source
 
 Requirements: JDK 17 and the Android SDK (platform 35). Android Studio works out of the box.
 
 ```sh
-./gradlew testDebugUnitTest   # unit tests
-./gradlew assembleDebug       # app/build/outputs/apk/debug/app-debug.apk
-./gradlew assembleRelease     # minified build, signed with the debug key
+./gradlew testOfflineDebugUnitTest testSyncDebugUnitTest   # unit tests
+./gradlew assembleDebug             # app/build/outputs/apk/{offline,sync}/debug/
+./gradlew assembleOfflineRelease    # minified normal build, signed with the debug key
 ```
 
 To publish your own build, add a signing config with your own key in `app/build.gradle.kts`.

@@ -18,6 +18,17 @@ android {
         versionName = "1.0.0"
     }
 
+    // "offline" is the normal build and has no network permission. "sync" adds one, only to push
+    // stats to the user's own laptop (see src/sync). Same applicationId, so one replaces the other.
+    flavorDimensions += "net"
+    productFlavors {
+        create("offline") { dimension = "net" }
+        create("sync") {
+            dimension = "net"
+            versionNameSuffix = "-sync"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true

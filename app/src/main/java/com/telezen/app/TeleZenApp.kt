@@ -3,6 +3,7 @@ package com.telezen.app
 import android.app.Application
 import android.content.Context
 import com.telezen.app.core.Day
+import com.telezen.app.core.LaptopSync
 import com.telezen.app.core.Notifications
 import com.telezen.app.core.UsageStatsHelper
 import com.telezen.app.data.RuntimeState
@@ -40,6 +41,7 @@ class TeleZenApp : Application() {
         runtime.ensureFirstRun()
         Notifications.createChannels(this)
         SummaryWorker.schedule(this)
+        LaptopSync.schedule(this)
     }
 
     fun log(type: String, pkg: String, targetId: String? = null, extra: String? = null) {
