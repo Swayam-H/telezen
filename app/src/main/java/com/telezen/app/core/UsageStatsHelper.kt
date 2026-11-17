@@ -65,6 +65,26 @@ class UsageStatsHelper(private val context: Context) {
     fun day(date: LocalDate): Map<String, Long> =
         foregroundByPackage(Day.startMillis(date), Day.startMillis(date.plusDays(1)))
 
+    /**
+     * Android's own weekly totals per app (kept about 4 weeks, longer than the ~10 days of daily data).
+     * Buckets don't line up with calendar weeks, so each carries its own start and end.
+     */
+    fun weeks(since: Long): List<Week> {
+        if (!Permissions.usageAccess(context)) return emptyList()
+        val stats = runCatching {
+            usm.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, since, System.currentTimeMillis())
+        }.getOrNull().orEmpty()
+        val out = HashMap<Long, Week>()
+        for (s in stats) {
+            val w = out.getOrPut(s.firstTimeStamp) { Week(s.firstTimeStamp, s.lastTimeStamp, HashMap()) }
+            w.end = maxOf(w.end, s.lastTimeStamp)
+            w.apps.merge(s.packageName, s.totalTimeInForeground, ::maxOf) // one entry per app expected; never double count
+        }
+        return out.values.sortedBy { it.start }
+    }
+
+    class Week(val start: Long, var end: Long, val apps: HashMap<String, Long>)
+
     private companion object {
         const val RESUMED = 1
         const val PAUSED = 2

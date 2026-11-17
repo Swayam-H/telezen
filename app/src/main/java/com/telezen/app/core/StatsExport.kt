@@ -8,11 +8,14 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 import kotlinx.serialization.json.putJsonObject
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 
 /** Screen time per app and blocked feeds per day, as a file the WatchZen laptop dashboard imports. */
 object StatsExport {
     private const val DAYS = 30L
+    private const val WEEKS_BACK = 42L
 
     suspend fun json(app: TeleZenApp): String = withContext(Dispatchers.IO) {
         val today = LocalDate.now()
@@ -44,6 +47,27 @@ object StatsExport {
                             }
                             putJsonObject("blocks") {
                                 dayBlocks.forEach { put(it.name ?: "other", it.count) }
+                            }
+                        }
+                    }
+                }
+            }
+            // Daily usage only goes back about 10 days; Android's weekly totals reach about 4 weeks further.
+            putJsonArray("weeks") {
+                val zone = ZoneId.systemDefault()
+                val date = { ms: Long -> Instant.ofEpochMilli(ms).atZone(zone).toLocalDate().toString() }
+                app.usage.weeks(Day.startMillis(today.minusDays(WEEKS_BACK))).forEach { w ->
+                    val apps = w.apps.filter { (pkg, ms) -> ms >= 60_000 && pkg !in skip }
+                    if (apps.isNotEmpty()) addJsonObject {
+                        put("start", date(w.start))
+                        put("end", date(w.end))
+                        putJsonArray("apps") {
+                            apps.forEach { (pkg, ms) ->
+                                addJsonObject {
+                                    put("pkg", pkg)
+                                    put("label", Apps.label(app, pkg))
+                                    put("ms", ms)
+                                }
                             }
                         }
                     }
